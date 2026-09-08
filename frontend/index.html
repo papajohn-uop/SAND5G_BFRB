@@ -105,6 +105,16 @@
         color: var(--muted);
       }
 
+      .result ul {
+        margin: 10px 0 0 20px;
+        padding: 0;
+        color: var(--muted);
+      }
+
+      .result li {
+        margin: 8px 0;
+      }
+
       .error {
         color: #fca5a5;
       }
@@ -127,7 +137,7 @@
       <div id="result" class="result" aria-live="polite">
         <h2>Results</h2>
         <p id="summary"></p>
-        <p id="details"></p>
+        <div id="details"></div>
       </div>
     </div>
 
@@ -158,11 +168,23 @@
           const data = await response.json();
 
           summary.textContent = `${data.cve}: ${data.vulnerable_sboms} vulnerable SBOMs out of ${data.sboms_checked} checked.`;
-          details.textContent = `Operators checked: ${data.operators_checked}.`;
+
+          const operatorList = data.operators.map((operator) => {
+            const ids = operator.vulnerable_sboms_ids && operator.vulnerable_sboms_ids.length
+              ? operator.vulnerable_sboms_ids.join(', ')
+              : 'None';
+
+            return `<li><strong>${operator.operator}</strong>: ${operator.vulnerable_sboms} vulnerable SBOMs out of ${operator.sboms_checked} checked. IDs: ${ids}</li>`;
+          }).join('');
+
+          details.innerHTML = `
+            <p><strong>Operators checked:</strong> ${data.operators_checked}</p>
+            <p><strong>Total SBOMs checked:</strong> ${data.sboms_checked}</p>
+            <ul>${operatorList}</ul>
+          `;
         } catch (error) {
           summary.textContent = 'Unable to fetch vulnerability data.';
-          details.textContent = error.message;
-          details.classList.add('error');
+          details.innerHTML = `<p class="error">${error.message}</p>`;
         }
       });
     </script>
