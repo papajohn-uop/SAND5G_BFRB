@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      context: ./backend-poc
+    container_name: sand5g-backend
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: sand5g-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    restart: unless-stopped
