@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAND5G BRFB</title>
+    <style>
+      :root {
+        --bg: #111827;
+        --panel: #1f2937;
+        --text: #f9fafb;
+        --muted: #d1d5db;
+        --accent: #ef4444;
+        --accent-dark: #b91c1c;
+        --border: #374151;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Arial, sans-serif;
+      }
+
+      .card {
+        width: min(90vw, 520px);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px 24px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+      }
+
+      h1 {
+        margin-top: 0;
+        text-align: center;
+        font-size: 2rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      select {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: #0f172a;
+        color: var(--text);
+        font-size: 1rem;
+      }
+
+      button {
+        width: 100%;
+        min-height: 84px;
+        border: none;
+        border-radius: 12px;
+        padding: 22px 16px;
+        background: linear-gradient(var(--accent), var(--accent-dark));
+        color: white;
+        font-size: 1.6rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform 0.15s ease, filter 0.15s ease;
+      }
+
+      button:hover {
+        filter: brightness(1.05);
+      }
+
+      button:active {
+        transform: translateY(1px) scale(0.995);
+      }
+
+      .result {
+        margin-top: 24px;
+        padding: 16px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        display: none;
+      }
+
+      .result.visible {
+        display: block;
+      }
+
+      .result h2 {
+        margin: 0 0 10px;
+        font-size: 1.1rem;
+      }
+
+      .result p {
+        margin: 6px 0;
+        color: var(--muted);
+      }
+
+      .error {
+        color: #fca5a5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>SAND 5G BRFB</h1>
+
+      <label for="cveSelect">Select vulnerability</label>
+      <select id="cveSelect">
+        <option value="CVE-2024-0001">CVE-2024-0001</option>
+        <option value="CVE-2024-1234">CVE-2024-1234</option>
+        <option value="CVE-2024-5678">CVE-2024-5678</option>
+        <option value="CVE-2025-8888">CVE-2025-8888</option>
+      </select>
+
+      <button id="checkBtn" type="button">Check SBOM status</button>
+
+      <div id="result" class="result" aria-live="polite">
+        <h2>Results</h2>
+        <p id="summary"></p>
+        <p id="details"></p>
+      </div>
+    </div>
+
+    <script>
+      const apiUrl = 'http://localhost:8000/check-cve';
+      const cveSelect = document.getElementById('cveSelect');
+      const checkBtn = document.getElementById('checkBtn');
+      const result = document.getElementById('result');
+      const summary = document.getElementById('summary');
+      const details = document.getElementById('details');
+
+      checkBtn.addEventListener('click', async () => {
+        const cve = cveSelect.value;
+        result.classList.remove('visible');
+        result.classList.add('visible');
+
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cve: cve })
+          });
+
+          if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          summary.textContent = `${data.cve}: ${data.vulnerable_sboms} vulnerable SBOMs out of ${data.sboms_checked} checked.`;
+          details.textContent = `Operators checked: ${data.operators_checked}.`;
+        } catch (error) {
+          summary.textContent = 'Unable to fetch vulnerability data.';
+          details.textContent = error.message;
+          details.classList.add('error');
+        }
+      });
+    </script>
+  </body>
+</html>
