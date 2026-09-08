@@ -13,6 +13,7 @@ class OperatorResult(BaseModel):
     operator: str
     sboms_checked: int
     vulnerable_sboms: int
+    vulnerable_sboms_ids: List[str] = Field(default_factory=list, description="List of vulnerable SBOM IDs")
 
 
 class CheckCVEResponse(BaseModel):
@@ -37,9 +38,11 @@ def build_random_response(cve: str) -> CheckCVEResponse:
     for operator in selected_operators:
         sboms = random.randint(10, 30)
         vulnerable = 0
+        vulnerable_sboms_ids = []
         for _ in range(sboms):
             if random.random() < 0.05:
                 vulnerable += 1
+                vulnerable_sboms_ids.append(f"sbom_{random.randint(1, 1000)}")
 
         total_sboms += sboms
         total_vulnerable += vulnerable
@@ -48,6 +51,7 @@ def build_random_response(cve: str) -> CheckCVEResponse:
                 operator=operator,
                 sboms_checked=sboms,
                 vulnerable_sboms=vulnerable,
+                vulnerable_sboms_ids=vulnerable_sboms_ids,
             )
         )
 
