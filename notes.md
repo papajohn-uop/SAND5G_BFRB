@@ -48,3 +48,7 @@ The system will follow a simple request flow:
 
 - cd backend-poc
 - uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+### Frontend 
+- cd frontend
+- python3 -m http.server 8080
