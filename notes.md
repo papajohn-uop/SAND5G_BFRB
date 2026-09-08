@@ -40,3 +40,11 @@ The system will follow a simple request flow:
 - Backend PoC: Lightweight service exposing one endpoint for testing and validation.
 - Production backend: Real Incident Response API used in deployment.
 - SBOM data source: Collection of SBOMs used to evaluate vulnerabilities across operators.
+
+
+## Manual run
+
+### PoC Server
+
+- cd backend-poc
+- uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
