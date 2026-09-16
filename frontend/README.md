@@ -11,6 +11,14 @@ cd /home/ubuntu/papajohn/SAND5G/frontend
 python3 -m http.server 8080
 ```
 
+```bash
+cd /home/ubuntu/papajohn/SAND5G/frontend
+python3 server.py
+curl "http://172.16.100.128:8080/set?value=SOME_ID"
+
+```
+
+
 Then open:
 
 - http://localhost:8080

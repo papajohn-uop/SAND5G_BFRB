@@ -154,8 +154,8 @@
         const cve = cveSelect.value;
         result.classList.remove('visible');
         result.classList.add('visible');
-        console.log("Selected CVE:", cve);
-        console.log("Target API URL:", apiUrl);
+        console.log("Selected CVE->", cve);
+        console.log("Target API URL->", apiUrl);
 
 
         try {
@@ -192,5 +192,20 @@
         }
       });
     </script>
+
+<h1 id="value">Waiting...</h1>
+
+<script>
+async function updateValue() {
+    const response = await fetch("/value");
+    const value = await response.text();
+
+    document.getElementById("value").textContent = value;
+}
+
+setInterval(updateValue, 1000);
+updateValue();
+</script>
+
   </body>
 </html>
