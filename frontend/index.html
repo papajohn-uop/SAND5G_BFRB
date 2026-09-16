@@ -142,6 +142,7 @@
     </div>
 
     <script src="config.js"></script>
+document.getElementById("checkBtn").addEventListener("click", async () => {
     <script>
       const apiUrl = window.APP_CONFIG?.apiUrl || 'http://localhost:8000/check-cve';
       const cveSelect = document.getElementById('cveSelect');
@@ -151,6 +152,9 @@
       const details = document.getElementById('details');
 
       checkBtn.addEventListener('click', async () => {
+
+
+        
         const cve = cveSelect.value;
         result.classList.remove('visible');
         result.classList.add('visible');

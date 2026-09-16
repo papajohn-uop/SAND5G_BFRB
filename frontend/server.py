@@ -27,6 +27,15 @@ class Handler(SimpleHTTPRequestHandler):
             self.wfile.write(value.encode())
             return
 
+        if parsed.path == "/reset":
+            value = ""
+
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"OK")
+            return
+
+
         return super().do_GET()
 
 
