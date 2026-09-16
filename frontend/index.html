@@ -193,13 +193,13 @@
       });
     </script>
 
+<h2>CHECK RESULTS ON HIVE TICKET:</h2>
 <h1 id="value">Waiting...</h1>
 
 <script>
 async function updateValue() {
     const response = await fetch("/value");
     const value = await response.text();
-
     document.getElementById("value").textContent = value;
 }
 
