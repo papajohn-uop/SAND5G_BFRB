@@ -17,6 +17,8 @@ Then open:
 
 The frontend sends requests to:
 
-- http://localhost:8000/check-cve
+- `config.js` defines the API URL used by the page.
+- The default config points to `http://172.16.100.128:8000/check-cve`.
+- Update `frontend/config.js` if your backend runs on a different host.
 
 Make sure the FastAPI backend is running first.

@@ -141,8 +141,9 @@
       </div>
     </div>
 
+    <script src="config.js"></script>
     <script>
-      const apiUrl = 'http://172.16.100.128:8000/check-cve';
+      const apiUrl = window.APP_CONFIG?.apiUrl || 'http://localhost:8000/check-cve';
       const cveSelect = document.getElementById('cveSelect');
       const checkBtn = document.getElementById('checkBtn');
       const result = document.getElementById('result');
@@ -153,6 +154,9 @@
         const cve = cveSelect.value;
         result.classList.remove('visible');
         result.classList.add('visible');
+        console.log("Selected CVE:", cve);
+        console.log("Target API URL:", apiUrl);
+
 
         try {
           const response = await fetch(apiUrl, {
